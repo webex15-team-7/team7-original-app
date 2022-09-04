@@ -1,10 +1,47 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <div class="signup">
+    <table>
+      <tr>
+        <th>メールアドレス：</th>
+      </tr>
+      <tr>
+        <td><input type="email" v-model="mailaddress" /></td>
+      </tr>
+      <tr>
+        <th>パスワード：</th>
+      </tr>
+      <tr>
+        <td><input type="password" v-model="password" /></td>
+      </tr>
+    </table>
+    <button @click="signUp">登録</button>
+  </div>
 </template>
+
+<script>
+import { projectAuth } from "./firebase.js"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+
+export default {
+  data() {
+    return {
+      mailaddress: "",
+      password: "",
+    }
+  },
+  methods: {
+    signUp: function () {
+      createUserWithEmailAndPassword(
+        projectAuth,
+        this.mailaddress,
+        this.password
+      )
+        .then()
+        .catch()
+    },
+  },
+}
+</script>
 
 <style>
 #app {
@@ -13,18 +50,6 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+  margin-top: 60px;
 }
 </style>
