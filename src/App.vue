@@ -1,21 +1,14 @@
 <template>
-  <SingUpComponent />
-  <SingInComponent />
+  <div>
+    <div>
+      <router-link to="/">Sign in</router-link>
+      <router-link to="/SignUp">Sign up</router-link>
+    </div>
+    <router-view />
+  </div>
 </template>
 
-<script>
-import SingUpComponent from "./components/SignUp.vue"
-import SingInComponent from "./components/SignInComponent.vue"
-
-export default {
-  components: {
-    SingUpComponent,
-    SingInComponent,
-  },
-  data() {},
-  methods: {},
-}
-</script>
+<script></script>
 
 <style>
 #app {
