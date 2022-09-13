@@ -3,6 +3,7 @@
     <div>
       <router-link to="/">Sign in</router-link>
       <router-link to="/SignUp">Sign up</router-link>
+      <router-link to="/SpotifyAPI">SpotifyAPI</router-link>
     </div>
     <router-view />
   </div>
@@ -20,3 +21,5 @@
   margin-top: 60px;
 }
 </style>
+
+<!-- spotifyから曲をとってきて画面に表示させる機能はゼミでやったやつ。geek-twitterでもある？ -->
