@@ -27,6 +27,20 @@
           </li>
         </ul>
       </div>
+      <div v-if="myTracks != null">
+        <ul style="list-style: none">
+          <li>----------------------------------</li>
+          <li v-for="(val, k) in myTracks" v-bind:key="k">
+            <div>{{ val.name }}</div>
+            <div>
+              <input type="checkbox" v-model="isDone" />
+              <div>{{ isDone }}</div>
+            </div>
+          </li>
+          <div>{{ selection }}</div>
+          <button @click="MusicSelect">決定</button>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -41,10 +55,18 @@ export default {
       tracks: null,
       myTracks: null,
       selected: "",
+      // selectedMusic: null,
+      isDone: "",
     }
   },
   props: {
     routeParams: Object,
+  },
+
+  computed: {
+    selection: function () {
+      return this.test
+    },
   },
 
   created() {
@@ -92,6 +114,7 @@ export default {
       await axios
         .get(endpoint, data)
         .then((res) => {
+          console.log(res.data)
           this.tracks = res.data.items
         })
         .catch((err) => {
@@ -120,6 +143,17 @@ export default {
       }
       this.myTracks = tracks
     },
+
+    // onChange: function (isDone) {
+    //   console.log(isDone)
+    // },
+    // MusicSelect: function () {
+    //   const isDone = function () {}
+    //   if (isDone == true) {
+    //     console.log("チェックされています")
+    //   }
+    //   // const selectedMusic = []
+    // },
   },
   watch: {
     // ソート条件が変わったらソート実行
