@@ -33,8 +33,9 @@
           <li v-for="(val, k) in myTracks" v-bind:key="k">
             <div>{{ val.name }}</div>
             <div>
-              <input type="checkbox" v-model="isDone" />
-              <div>{{ isDone }}</div>
+              <input type="checkbox" v-model="tracks[k].isDone" />
+              <div>{{ tracks[k].isDone }}</div>
+              <div>{{ tracks[k].name }}</div>
             </div>
           </li>
           <div>{{ selection }}</div>
@@ -57,6 +58,7 @@ export default {
       selected: "",
       // selectedMusic: null,
       isDone: "",
+      selectedMusic: [],
     }
   },
   props: {
@@ -138,22 +140,23 @@ export default {
               energy: res2.data.energy,
               liveness: res2.data.liveness,
               tempo: res2.data.tempo,
+              isDone: false,
             })
           })
       }
       this.myTracks = tracks
+      console.log(this.myTracks)
+      console.log(this.tracks)
     },
 
-    // onChange: function (isDone) {
-    //   console.log(isDone)
-    // },
-    // MusicSelect: function () {
-    //   const isDone = function () {}
-    //   if (isDone == true) {
-    //     console.log("チェックされています")
-    //   }
-    //   // const selectedMusic = []
-    // },
+    MusicSelect() {
+      for (let i = 0; i < this.tracks.length; i++) {
+        if (this.tracks[i].isDone == true) {
+          this.selectedMusic.push(this.tracks[i].name)
+          console.log(this.selectedMusic)
+        }
+      }
+    },
   },
   watch: {
     // ソート条件が変わったらソート実行
