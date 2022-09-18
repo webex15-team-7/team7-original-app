@@ -1,18 +1,11 @@
 <template>
+  <div>ああああああ</div>
   <div class="myTracks" style="text-align: center">
     <h1>最近よく聴く曲の情報</h1>
     <div v-if="!auth">
       <button @click="spotifyLogin">認証</button>
     </div>
     <div v-else>
-      <select v-model="selected">
-        <option value="time">再生時間</option>
-        <option value="acousticness">アコースティック感</option>
-        <option value="danceability">踊りやすさ</option>
-        <option value="energy">エネルギー感</option>
-        <option value="energy">ライブ感</option>
-        <option value="tempo">テンポ感</option>
-      </select>
       <div v-if="myTracks != null">
         <ul style="list-style: none">
           <li v-for="(val, k) in myTracks" :key="k">
@@ -35,24 +28,9 @@
             <div>
               <input type="checkbox" v-model="tracks[k].isDone" />
               <div>{{ tracks[k].isDone }}</div>
-              <!-- <div>{{ tracks[k].name }}</div> -->
             </div>
           </li>
         </ul>
-      </div>
-      <div>
-        <div>都道府県</div>
-        <select v-model="selectedItem">
-          <option value="">都道府県選択</option>
-          <option v-for="(pref, index) in prefList" :key="index">
-            {{ pref.name }}
-          </option>
-        </select>
-      </div>
-      <button @click="MusicSelect">この音楽をデータベースへ送る</button>
-      <div>
-        <div>-----------------------------------</div>
-        <button @click="getFirecaseData">取得</button>
       </div>
     </div>
   </div>

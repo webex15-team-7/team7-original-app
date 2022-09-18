@@ -20,6 +20,7 @@
       <router-link to="/signup">新規登録</router-link>
     </p> -->
   </div>
+  <div><router-link to="/SpotifyAPI">SpotifyAPI</router-link> |</div>
 </template>
 
 <script>
