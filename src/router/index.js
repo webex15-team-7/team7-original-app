@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import SignIn from "../views/SignIn.vue"
 import SignUp from "../views/SignUp.vue"
 import SpotifyAPI from "../views/SpotifyAPI"
+import MusicAnalysis from "../views/MusicAnalysis"
 
 const routes = [
   {
@@ -18,6 +19,14 @@ const routes = [
     path: "/SpotifyAPI",
     name: "SpotifyAPI",
     component: SpotifyAPI,
+    props: (route) => {
+      return { routeParams: route.query }
+    },
+  },
+  {
+    path: "/MusicAnalysis",
+    name: "MusicAnalysis",
+    component: MusicAnalysis,
     props: (route) => {
       return { routeParams: route.query }
     },

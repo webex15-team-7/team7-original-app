@@ -4,6 +4,7 @@
       <router-link to="/">Sign in</router-link>
       <router-link to="/SignUp">Sign up</router-link>
       <router-link to="/SpotifyAPI">SpotifyAPI</router-link>
+      <router-link to="/MusicAnalysis">MusicAnalysis</router-link>
     </div>
     <router-view />
   </div>
