@@ -42,11 +42,30 @@
           <button @click="MusicSelect">決定</button>
         </ul>
       </div>
+      <div>
+        <div>-----------------------------------</div>
+        <button @click="getFirecaseData">取得</button>
+      </div>
     </div>
   </div>
+
+  <div class="flex flex-wrap flex-row mt-2">
+    <div class="w-1/3 px-4 py-2 font-semibold">都道府県</div>
+    <select id="pref" class="w-2/3 px-4 py-2 border rounded" v-model="pref">
+      <option value="">都道府県選択</option>
+      <option :value="pref.id" :key="index" v-for="(pref, index) in prefList">
+        {{ pref.name }}
+      </option>
+    </select>
+  </div>
 </template>
+
 <script>
 import axios from "axios"
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore"
+import { db } from "../firebase"
+import { PREFS } from "./todouhukenlist"
+// import { reactive } from "vue"
 
 export default {
   data: function () {
@@ -59,6 +78,7 @@ export default {
       // selectedMusic: null,
       isDone: "",
       selectedMusic: [],
+      todouhukenList: [],
     }
   },
   props: {
@@ -67,10 +87,10 @@ export default {
 
   computed: {
     selection: function () {
+      console.log(PREFS)
       return this.test
     },
   },
-
   created() {
     if (this.$route.hash) {
       this.$router.push(this.$route.fullPath.replace("#", "?"))
@@ -116,7 +136,7 @@ export default {
       await axios
         .get(endpoint, data)
         .then((res) => {
-          console.log(res.data)
+          // console.log(res.data)
           this.tracks = res.data.items
         })
         .catch((err) => {
@@ -141,21 +161,43 @@ export default {
               liveness: res2.data.liveness,
               tempo: res2.data.tempo,
               isDone: false,
+              ID: this.tracks[i].id,
             })
           })
       }
       this.myTracks = tracks
-      console.log(this.myTracks)
-      console.log(this.tracks)
+      // console.log(this.myTracks)
+      // console.log(this.tracks)
     },
 
     MusicSelect() {
       for (let i = 0; i < this.tracks.length; i++) {
         if (this.tracks[i].isDone == true) {
           this.selectedMusic.push(this.tracks[i].name)
-          console.log(this.selectedMusic)
+          this.selectedMusic.push(this.tracks[i].id)
+          // console.log(this.selectedMusic)
         }
       }
+      addDoc(collection(db, "favoriteMusic"), {
+        text: this.selectedMusic[0],
+        id: this.selectedMusic[1],
+      }).then(this.selectedMusic.splice(0))
+    },
+
+    async getFirecaseData() {
+      const q = query(
+        collection(db, "favoriteMusic"),
+        where("id", "==", "6b8ckY0AxgFj0a4hzBg6hS")
+      )
+
+      const querySnapshot = await getDocs(q)
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        let result = []
+        result.push([doc.data()])
+        // console.log(result)
+        console.log(doc.id, " => ", doc.data())
+      })
     },
   },
   watch: {
