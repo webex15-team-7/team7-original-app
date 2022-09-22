@@ -27,9 +27,7 @@ const routes = [
     path: "/MusicAnalysis",
     name: "MusicAnalysis",
     component: MusicAnalysis,
-    props: (route) => {
-      return { routeParams: route.query }
-    },
+    props: true,
   },
 ]
 
