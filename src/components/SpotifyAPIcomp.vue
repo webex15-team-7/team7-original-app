@@ -1,22 +1,22 @@
 <template>
   <div class="myTracks" style="text-align: center">
-    <h1>最近よく聴く曲の情報</h1>
+    <h1>MusicAnalysis</h1>
     <div v-if="!auth">
-      <button @click="spotifyLogin">認証</button>
+      <button @click="spotifyLogin" class="button">Start!</button>
     </div>
     <div v-else>
-      <select v-model="selected">
+      <!-- <select v-model="selected">
         <option value="time">再生時間</option>
         <option value="acousticness">アコースティック感</option>
         <option value="danceability">踊りやすさ</option>
         <option value="energy">エネルギー感</option>
         <option value="energy">ライブ感</option>
         <option value="tempo">テンポ感</option>
-      </select>
+      </select> -->
       <div v-if="myTracks != null">
         <ul style="list-style: none">
           <li v-for="(val, k) in myTracks" :key="k">
-            <img :src="val.url" />
+            <img :src="val.url" class="Trackimg" />
             <div>曲名:{{ val.name }}</div>
             <div>再生時間:{{ val.time }}秒</div>
             <div>アコースティック感:{{ val.acousticness }}</div>
@@ -34,13 +34,11 @@
             <div>{{ val.name }}</div>
             <div>
               <input type="checkbox" v-model="tracks[k].isDone" />
-              <div>{{ tracks[k].isDone }}</div>
+              <!-- <div>{{ tracks[k].isDone }}</div> -->
               <!-- <div>{{ tracks[k].name }}</div> -->
             </div>
           </li>
         </ul>
-      </div>
-      <div>
         <div>都道府県</div>
         <select v-model="selectedItem">
           <option value="">都道府県選択</option>
@@ -49,13 +47,30 @@
           </option>
         </select>
       </div>
-      <button @click="MusicSelect">この音楽をデータベースへ送る</button>
+      <button @click="MusicSelect" class="button">この音楽に投票する</button>
       <div>
         <div>-----------------------------------</div>
-        <button @click="getFirecaseData">取得</button>
+        <div>
+          <select v-model="getplace">
+            <option value="">都道府県選択</option>
+            <option v-for="(pref, index) in prefList" :key="index">
+              {{ pref.name }}
+            </option>
+          </select>
+        </div>
+        <button @click="getFirecaseData" class="button">取得</button>
+        <div>
+          <div v-if="result !== []">
+            <div v-for="(resultval, i) in result" v-bind:key="i">
+              <div>{{ resultval[i] }}</div>
+            </div>
+            <ul style="list-style: none"></ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  <div></div>
 </template>
 
 <script>
@@ -78,6 +93,8 @@ export default {
       prefList: [],
       prefs: [],
       selectedItem: 1,
+      result: [],
+      getplace: 1,
     }
   },
   props: {
@@ -168,6 +185,8 @@ export default {
           })
       }
       this.myTracks = tracks
+      console.log(this.myTracks)
+      console.log(typeof this.myTracks)
       // console.log(this.myTracks)
       // console.log(this.tracks)
     },
@@ -179,6 +198,7 @@ export default {
           this.selectedMusic.push(this.tracks[i].id)
           this.selectedMusic.push(this.selectedItem)
           // console.log(this.selectedMusic)
+          this.$emit("my-click", this.selectedMusic)
         }
       }
       addDoc(collection(db, "favoriteMusic"), {
@@ -192,17 +212,18 @@ export default {
     async getFirecaseData() {
       const q = query(
         collection(db, "favoriteMusic"),
-        where("place", "==", "北海道")
+        where("place", "==", this.getplace)
       )
 
       const querySnapshot = await getDocs(q)
+      let result = []
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        let result = []
-        result.push([doc.data()])
-        console.log(result)
-        console.log(doc.id, " => ", doc.data())
+        result.push(doc.data())
+        // console.log(doc.id, " => ", doc.data())
       })
+      console.log(result)
+      console.log(typeof result)
     },
   },
   watch: {
@@ -215,3 +236,33 @@ export default {
   },
 }
 </script>
+
+<style>
+body {
+  background-color: rgb(222, 207, 195);
+}
+
+.button {
+  flex-grow: 1;
+  list-style: none;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 25%;
+  box-shadow: 8px 7px 7px 5px rgb(44 48 49 / 45%);
+  width: 30%;
+  height: 50%;
+  padding: 2vh;
+}
+
+.Trackimg {
+  flex-grow: 1;
+  list-style: none;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 25%;
+  box-shadow: 8px 9px 10px 5px rgb(44 48 49 / 45%);
+  width: 30vh;
+  height: 30vh;
+  padding: 2vh;
+}
+</style>
