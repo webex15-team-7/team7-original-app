@@ -1,26 +1,34 @@
 <template>
-  <div class="signin">
-    <table>
-      <tr>
-        <th>メールアドレス：</th>
-      </tr>
-      <tr>
-        <td><input type="email" v-model="mailaddress" /></td>
-      </tr>
-      <tr>
-        <th>パスワード：</th>
-      </tr>
-      <tr>
-        <td><input type="password" v-model="password" /></td>
-      </tr>
-    </table>
-    <button @click="login">ログイン</button>
-    <!-- <p>
-      新しいアカウントを作成しますか？
-      <router-link to="/signup">新規登録</router-link>
-    </p> -->
+  <div>
+    <div class="wrapper">
+      <div class="big-bg">
+        <div class="container">
+          <h1 class="appname">MusicAnalysis</h1>
+          <div>
+            <div>
+              <div>メールアドレス</div>
+            </div>
+            <div>
+              <div><input type="email" v-model="mailaddress" /></div>
+            </div>
+            <div>
+              <div>パスワード</div>
+            </div>
+            <div>
+              <div><input type="password" v-model="password" /></div>
+            </div>
+          </div>
+          <router-link to="/SpotifyAPI">
+            <button @click="login">ログイン</button>
+          </router-link>
+          <p>
+            新しいアカウントを作成しますか？
+            <router-link to="/signup">新規登録</router-link>
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
-  <div><router-link to="/SpotifyAPI">SpotifyAPI</router-link> |</div>
 </template>
 
 <script>
@@ -50,7 +58,38 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
+}
+img {
+  max-width: 100%;
+}
+body {
+  overflow-x: hidden;
+  margin: 0;
+}
+h1 {
+  font-size: 10vh;
+  padding: 0%;
+  margin: 0;
+}
+.wrapper {
+  overflow-x: hidden;
+}
+.big-bg {
+  background-size: cover;
+  background-position: center top;
+  background-image: url(../images/24655357_s.jpg);
+  background-blend-mode: multiply;
+  min-height: 100vh;
+}
+.container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0 0 0 0;
+  width: 80%;
+  height: 3.2rem;
 }
 </style>

@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import SignIn from "../views/SignIn.vue"
 import SignUp from "../views/SignUp.vue"
 import SpotifyAPI from "../views/SpotifyAPI"
-import MusicAnalysis from "../views/MusicAnalysis"
+// import MusicAnalysis from "../views/MusicAnalysis"
 
 const routes = [
   {
@@ -23,12 +23,12 @@ const routes = [
       return { routeParams: route.query }
     },
   },
-  {
-    path: "/MusicAnalysis",
-    name: "MusicAnalysis",
-    component: MusicAnalysis,
-    props: true,
-  },
+  // {
+  //   path: "/MusicAnalysis",
+  //   name: "MusicAnalysis",
+  //   component: MusicAnalysis,
+  //   props: true,
+  // },
 ]
 
 const router = createRouter({

@@ -18,11 +18,11 @@
           <li v-for="(val, k) in myTracks" :key="k">
             <img :src="val.url" class="Trackimg" />
             <div>曲名:{{ val.name }}</div>
-            <div>再生時間:{{ val.time }}秒</div>
-            <div>アコースティック感:{{ val.acousticness }}</div>
-            <div>踊りやすさ:{{ val.danceability }}</div>
-            <div>エネルギー感:{{ val.energy }}</div>
-            <div>ライブ感:{{ val.liveness }}</div>
+            <!-- <div>再生時間:{{ val.time }}秒</div> -->
+            <div>アコースティック感:{{ val.acousticness }}/1</div>
+            <div>踊りやすさ:{{ val.danceability }}/1</div>
+            <div>過激さ:{{ val.energy }}/1</div>
+            <!-- <div>ライブ感:{{ val.liveness }}</div> -->
             <div>テンポ感(BPM平均):{{ val.tempo }}</div>
           </li>
         </ul>
@@ -30,6 +30,7 @@
       <div v-if="myTracks != null">
         <ul style="list-style: none">
           <li>----------------------------------</li>
+          <div>あなたのおすすめの曲をおしえて！</div>
           <li v-for="(val, k) in myTracks" v-bind:key="k">
             <div>{{ val.name }}</div>
             <div>
@@ -39,18 +40,20 @@
             </div>
           </li>
         </ul>
-        <div>都道府県</div>
-        <select v-model="selectedItem">
+        <div>あなたの活動している地域は？？</div>
+        <select v-model="selectedPlace">
           <option value="">都道府県選択</option>
           <option v-for="(pref, index) in prefList" :key="index">
             {{ pref.name }}
           </option>
         </select>
       </div>
-      <button @click="MusicSelect" class="button">この音楽に投票する</button>
+      <button @click="MusicSelect" class="button">この曲をおすすめする</button>
       <div>
         <div>-----------------------------------</div>
+        <div>都道府県ごとのおすすめ曲！</div>
         <div>
+          <div>知りたい都道府県</div>
           <select v-model="getplace">
             <option value="">都道府県選択</option>
             <option v-for="(pref, index) in prefList" :key="index">
@@ -61,8 +64,9 @@
         <button @click="getFirecaseData" class="button">取得</button>
         <div>
           <div v-if="result !== []">
+            <div>聞かれている曲</div>
             <div v-for="(resultval, i) in result" v-bind:key="i">
-              <div>{{ resultval[i] }}</div>
+              <div>曲名:{{ resultval.text }}</div>
             </div>
             <ul style="list-style: none"></ul>
           </div>
@@ -88,14 +92,21 @@ export default {
       myTracks: null,
       selected: "",
       // selectedMusic: null,
-      isDone: "",
+      // isDone: [],
       selectedMusic: [],
       prefList: [],
       prefs: [],
-      selectedItem: 1,
+      selectedPlace: 100,
       result: [],
       getplace: 1,
     }
+  },
+  watch: {
+    isDone: {
+      handleError: function () {
+        console.log("watch!!!")
+      },
+    },
   },
   props: {
     routeParams: Object,
@@ -196,42 +207,58 @@ export default {
         if (this.tracks[i].isDone == true) {
           this.selectedMusic.push(this.tracks[i].name)
           this.selectedMusic.push(this.tracks[i].id)
-          this.selectedMusic.push(this.selectedItem)
-          // console.log(this.selectedMusic)
-          this.$emit("my-click", this.selectedMusic)
+          this.selectedMusic.push(this.selectedPlace)
         }
       }
-      addDoc(collection(db, "favoriteMusic"), {
-        text: this.selectedMusic[0],
-        id: this.selectedMusic[1],
-        place: this.selectedMusic[2],
-      }).then(this.selectedMusic.splice(0))
-      // console.log(this.selectedItem)
-    },
+      console.log(this.selectedMusic)
+      if (
+        this.selectedMusic.length === 3 &&
+        this.selectedPlace != 100 &&
+        this.selectedPlace != ""
+      ) {
+        addDoc(collection(db, "favoriteMusic"), {
+          text: this.selectedMusic[0],
+          id: this.selectedMusic[1],
+          place: this.selectedMusic[2],
+        }).then(this.selectedMusic.splice(0))
+      } else {
+        alert("音楽1曲と場所を選択してください")
+        this.selectedMusic = []
+      }
 
+      // console.log(this.selectedPlace)
+    },
     async getFirecaseData() {
-      const q = query(
-        collection(db, "favoriteMusic"),
-        where("place", "==", this.getplace)
-      )
+      if (this.result.length == 0) {
+        const q = query(
+          collection(db, "favoriteMusic"),
+          where("place", "==", this.getplace)
+        )
+        const querySnapshot = await getDocs(q)
 
-      const querySnapshot = await getDocs(q)
-      let result = []
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        result.push(doc.data())
-        // console.log(doc.id, " => ", doc.data())
-      })
-      console.log(result)
-      console.log(typeof result)
-    },
-  },
-  watch: {
-    // ソート条件が変わったらソート実行
-    selected() {
-      this.myTracks.sort((a, b) => {
-        return a[this.selected] < b[this.selected] ? 1 : -1
-      })
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          this.result.push(doc.data())
+          // console.log(doc.id, " => ", doc.data())
+        })
+        console.log(this.result)
+        console.log(typeof this.result)
+      } else {
+        this.result = []
+        const q = query(
+          collection(db, "favoriteMusic"),
+          where("place", "==", this.getplace)
+        )
+        const querySnapshot = await getDocs(q)
+
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          this.result.push(doc.data())
+          // console.log(doc.id, " => ", doc.data())
+        })
+        console.log(this.result)
+        console.log(typeof this.result)
+      }
     },
   },
 }

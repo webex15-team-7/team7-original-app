@@ -3,12 +3,11 @@
     <div class="nav__bar">
       <div class="nav__items"></div>
     </div>
-    <div>
+    <!-- <div>
       <router-link to="/">Sign in</router-link>
       <router-link to="/SignUp">Sign up</router-link>
       <router-link to="/SpotifyAPI">SpotifyAPI</router-link>
-      <router-link to="/MusicAnalysis">MusicAnalysis</router-link>
-    </div>
+    </div> -->
     <router-view />
   </div>
 </template>
@@ -21,14 +20,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: rgb(138, 84, 179);
+  margin: 0px;
 }
 * {
   box-sizing: border-box;
 }
 body {
-  margin: 0;
+  margin: 0 0 10vh 0;
 }
 .nav__bar {
   display: flex;
